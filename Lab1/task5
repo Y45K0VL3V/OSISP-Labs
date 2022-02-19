@@ -1,0 +1,3 @@
+#!/bin/bash
+echo $@
+echo $@>./args_task5Result

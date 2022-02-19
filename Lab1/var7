@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# $1 = parsing directory path.
+# $2 = output file path.
+
+RED='\033[0;31m'
+NC='\033[0m'
+
+if [ $# -eq 2 ]
+then
+	if [ ! -d $1 ]
+	then
+		{
+			echo -e "${RED}!ERROR!${NC}"
+			echo "$1 : this directory doesn't exist"
+		}>&2
+	else
+		>$2
+		for dir in $(find $1 -type d)
+		do
+			echo -e "Amount: $(find $dir -type f | wc -l) \t Size: $(du -bsh $dir)">>$2
+		done 
+	fi
+else
+	{
+		echo -e "${RED}!ERROR!${NC}"
+		echo "First argument = parsing directory path."
+		echo "Second argument = output file path." 
+	}>&2
+fi
