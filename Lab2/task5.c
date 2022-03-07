@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     while ((currChar = getc(srcFile)) != EOF)
         putc(currChar, destFile);
 
-    if (CloseFile(srcFile, "Error occurred while trying to close source file.") |
-        CloseFile(destFile, "Error occurred while trying to close destination file."))
+    if (!(CloseFile(srcFile, "Error occurred while trying to close source file.") &
+        CloseFile(destFile, "Error occurred while trying to close destination file.")))
         return 0;
 
     return 1;
