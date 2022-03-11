@@ -102,7 +102,8 @@ int main(int argc, char *argv[])
         List* currPathSecond = secondDirFiles;
         while (currPathSecond != NULL)
         {
-            if(FileEquals(currPathFirst->str, currPathSecond->str))
+            //printf("%s %s\n", currPathFirst->str, currPathSecond->str);
+            if (FileEquals(currPathFirst->str, currPathSecond->str))
             {
                 OutEqualFiles(currPathFirst->str, currPathSecond->str, stdout);
                 OutEqualFiles(currPathFirst->str, currPathSecond->str, outputFile);
@@ -163,7 +164,7 @@ int FileEquals(char* firstFilePath, char* secondFilePath)
     FILE* secondFile = fdopen(secondFileDescriptor, "r");
 
     char char1, char2;
-    while((char1=fgetc(firstFile)) != EOF || (char2=fgetc(secondFile)) != EOF)
+    while((char1=fgetc(firstFile)) != EOF | (char2=fgetc(secondFile)) != EOF)
     {
         if (char1 != char2)
         {
