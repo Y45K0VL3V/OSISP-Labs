@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
         else
         {
             getc(stdin);
+            putc(currChar, stdout);
             currGroupLines = 0;
         }
     }
