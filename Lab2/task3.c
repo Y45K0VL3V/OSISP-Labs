@@ -31,7 +31,13 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    FILE* file = fdopen(descriptor, "w");
+    FILE* file;
+    if ((file = fdopen(descriptor, "w")) == NULL)
+    {
+        perror("Can't get the file with entered path.");
+        return 0;
+    }
+
     char inputChar;
     while ((inputChar = getchar()) != EXT_CHAR)
     {

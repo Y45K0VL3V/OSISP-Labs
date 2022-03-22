@@ -52,6 +52,17 @@ int SafeGetFileDescriptor(int* fileDescriptor, char* filePath)
     return 1;
 }
 
+int OpenFileDescriptor(FILE **destFile, int descriptor, char* mode)
+{
+    if ((*destFile = fdopen(descriptor, mode)) == NULL)
+    {
+        perror("Can't get the file with entered path.");
+        return 0;
+    }
+
+    return 1
+}
+
 int CloseFile(FILE** file)
 {
     // fclose() returns 0, if success.
@@ -90,7 +101,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    FILE* outputFile = fdopen(fileDescriptor, "w");
+    FILE* outputFile;
+    OpenFileDescriptor(&outputFile, fileDescriptor, "w");
 
     List *firstDirFiles = NULL, *secondDirFiles = NULL;
     GetAllFilePath(&firstDir, &firstDirFiles, argv[1]);
@@ -102,7 +114,6 @@ int main(int argc, char *argv[])
         List* currPathSecond = secondDirFiles;
         while (currPathSecond != NULL)
         {
-            //printf("%s %s\n", currPathFirst->str, currPathSecond->str);
             if (FileEquals(currPathFirst->str, currPathSecond->str))
             {
                 OutEqualFiles(currPathFirst->str, currPathSecond->str, stdout);
@@ -160,8 +171,11 @@ int FileEquals(char* firstFilePath, char* secondFilePath)
           SafeGetFileDescriptor(&secondFileDescriptor, secondFilePath)))
         return 0;
 
-    FILE* firstFile = fdopen(firstFileDescriptor, "r");
-    FILE* secondFile = fdopen(secondFileDescriptor, "r");
+    FILE *firstFile, *secondFile;
+    if(!(OpenFileDescriptor(&firstFile, firstFileDescriptor, "r") & OpenFileDescriptor(&secondFile,secondFileDescriptor,"w")))
+    {
+        return 0;
+    }
 
     char char1, char2;
     while((char1=fgetc(firstFile)) != EOF | (char2=fgetc(secondFile)) != EOF)

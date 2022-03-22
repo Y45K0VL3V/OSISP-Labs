@@ -48,8 +48,13 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    int groupLineAmount = atoi(argv[2]);
-    FILE* file = fdopen(descriptor, "r");
+    int groupLineAmount = strtol(argv[2]);
+    FILE* file;
+    if ((file = fdopen(descriptor, "r")) == NULL)
+    {
+        perror("Can't get the file with entered path.");
+        return 0;
+    }
 
     char currChar;
     int currGroupLines = 0;

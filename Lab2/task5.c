@@ -15,6 +15,16 @@ int CloseFile(FILE* file, char* errorText)
     return 1;
 }
 
+int OpenFileDescriptor(FILE **destFile, int descriptor, char* mode){
+    if ((*destFile = fdopen(descriptor, mode)) == NULL)
+    {
+        perror("Can't get the file with entered path.");
+        return 0;
+    }
+
+    return 1
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -41,8 +51,17 @@ int main(int argc, char *argv[])
     fstat(srcDescriptor, &srcFileStat);
     chmod(argv[2], srcFileStat.st_mode);
 
-    FILE* srcFile = fdopen(srcDescriptor, "r");
-    FILE* destFile = fdopen(destDescriptor, "w");
+    FILE *srcFile, *destFile;
+    if(!(OpenFileDescriptor(&srcFile, srcDescriptor, "r") & OpenFileDescriptor(&destFile,destDescriptor,"w")))
+    {
+        return 0;
+    }
+
+    if ((file = fdopen(descriptor, "r")) == NULL)
+    {
+        perror("Can't get the file with entered path.");
+        return 0;
+    }
 
     char currChar;
     while ((currChar = getc(srcFile)) != EOF)
