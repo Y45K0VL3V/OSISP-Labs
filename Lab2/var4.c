@@ -60,7 +60,7 @@ int OpenFileDescriptor(FILE **destFile, int descriptor, char* mode)
         return 0;
     }
 
-    return 1
+    return 1;
 }
 
 int CloseFile(FILE** file)
@@ -172,7 +172,7 @@ int FileEquals(char* firstFilePath, char* secondFilePath)
         return 0;
 
     FILE *firstFile, *secondFile;
-    if(!(OpenFileDescriptor(&firstFile, firstFileDescriptor, "r") & OpenFileDescriptor(&secondFile,secondFileDescriptor,"w")))
+    if(!(OpenFileDescriptor(&firstFile, firstFileDescriptor, "r") & OpenFileDescriptor(&secondFile,secondFileDescriptor,"r")))
     {
         return 0;
     }

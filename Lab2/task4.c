@@ -3,6 +3,7 @@
 #include "string.h"
 #include "ctype.h"
 #include "stdlib.h"
+#include "limits.h"
 
 int CloseFile(FILE* file)
 {
@@ -48,7 +49,14 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    int groupLineAmount = strtol(argv[2]);
+    char *endPos;
+    long int groupLineAmount = strtol(argv[2], &endPos,10);
+    if (groupLineAmount == LONG_MIN || groupLineAmount == LONG_MAX)
+    {
+        perror("Invalid rows amount.");
+        return 0;
+    }
+
     FILE* file;
     if ((file = fdopen(descriptor, "r")) == NULL)
     {

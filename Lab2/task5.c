@@ -22,7 +22,7 @@ int OpenFileDescriptor(FILE **destFile, int descriptor, char* mode){
         return 0;
     }
 
-    return 1
+    return 1;
 }
 
 int main(int argc, char *argv[])
@@ -54,12 +54,6 @@ int main(int argc, char *argv[])
     FILE *srcFile, *destFile;
     if(!(OpenFileDescriptor(&srcFile, srcDescriptor, "r") & OpenFileDescriptor(&destFile,destDescriptor,"w")))
     {
-        return 0;
-    }
-
-    if ((file = fdopen(descriptor, "r")) == NULL)
-    {
-        perror("Can't get the file with entered path.");
         return 0;
     }
 
