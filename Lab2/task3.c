@@ -2,7 +2,7 @@
 #include <fcntl.h>
 
 // Exit, on press "Escape".
-const char EXT_CHAR = 27;
+#define EXT_CHAR 27
 
 int CloseFile(FILE* file)
 {
