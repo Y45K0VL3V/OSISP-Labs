@@ -7,7 +7,7 @@ void PrintDirData(char* dirPath)
     DIR* dir;
     if ((dir = opendir(dirPath)) == NULL)
     {
-        fprintf( stderr, "Can't open directory %s.", dirPath);
+        fprintf( stderr, "Can't open directory %s.\n", dirPath);
         return;
     }
 
@@ -16,7 +16,7 @@ void PrintDirData(char* dirPath)
         printf("%s\n", dirData->d_name);
 
     if (closedir(dir) == -1)
-        fprintf( stderr, "Can't close directory %s.", dirPath);
+        fprintf( stderr, "Can't close directory %s.\n", dirPath);
 }
 
 int main(int argc, char *argv[])
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     char currDirPath[256];
     if (!getcwd(currDirPath, 256))
     {
-        perror("Can't get current directory name.");
+        fprintf(stderr, "Can't get current directory name.\n");
         return 0;
     }
 

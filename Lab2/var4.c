@@ -34,7 +34,7 @@ int CloseDir(DIR** dir)
 {
     if (closedir(*dir))
     {
-        perror("Error occurred while trying to close directory.\n");
+        fprintf(stderr, "Error occurred while trying to close directory.\n");
         return 0;
     }
 
@@ -56,7 +56,7 @@ int OpenFileDescriptor(FILE **destFile, int descriptor, char* mode)
 {
     if ((*destFile = fdopen(descriptor, mode)) == NULL)
     {
-        perror("Can't get the file with entered path.");
+        fprintf(stderr, "Can't get the file with entered path.\n");
         return 0;
     }
 
@@ -68,7 +68,7 @@ int CloseFile(FILE** file)
     // fclose() returns 0, if success.
     if (fclose(*file))
     {
-        perror("Error occurred while trying to close file.\n");
+        fprintf(stderr, "Error occurred while trying to close file.\n");
         return 0;
     }
 
@@ -83,10 +83,10 @@ int main(int argc, char *argv[])
 {
     if (argc != 4)
     {
-        perror("Invalid arguments amount!\n");
-        perror("First argument - 1st directory path.\n");
-        perror("Second argument - 2nd directory path.\n");
-        perror("Third argument - output file path.\n");
+        fprintf(stderr, "Invalid arguments amount!\n");
+        fprintf(stderr, "First argument - 1st directory path.\n");
+        fprintf(stderr, "Second argument - 2nd directory path.\n");
+        fprintf(stderr, "Third argument - output file path.\n");
         return 0;
     }
 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 
     if (fclose(outputFile))
     {
-        perror("Error occurred while trying to close output file.\n");
+        fprintf(stderr, "Error occurred while trying to close output file.\n");
         return 0;
     }
 
