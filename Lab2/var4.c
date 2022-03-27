@@ -20,6 +20,34 @@ void AddList(List ***head, char* str) {
     (**head) = tmp;
 }
 
+typedef struct HistoryList
+{
+    int firstDesk;
+    int secondDesk;
+    struct HistoryList* next;
+} HistoryList;
+
+void AddHistory(HistoryList **head, int desk1, int desk2) {
+    HistoryList *tmp = (HistoryList*)malloc(sizeof(HistoryList));
+    tmp->firstDesk = desk1;
+    tmp->secondDesk = desk2;
+    tmp->next = (*head);
+    (*head) = tmp;
+}
+
+int IsHistoryContain(HistoryList **head, int desk1, int desk2)
+{
+    HistoryList *curr = *head;
+    while (curr != NULL)
+    {
+        if (curr->firstDesk == desk1 && curr->secondDesk == desk2)
+            return 1;
+        curr = curr->next;
+    }
+
+    return 0;
+}
+
 int SafeOpenDir(DIR** dir, char* dirPath)
 {
     if ((*dir = opendir(dirPath)) == NULL)
@@ -78,6 +106,8 @@ int CloseFile(FILE** file)
 void GetAllFilePath(DIR** dir, List** paths, char* currPath);
 int FileEquals(char* firstFilePath, char* secondFilePath);
 void OutEqualFiles(char* firstPath, char* secondPath, FILE* outputStream);
+
+HistoryList *history = NULL;
 
 int main(int argc, char *argv[])
 {
@@ -143,7 +173,8 @@ void GetAllFilePath(DIR** dir, List** paths, char* currPath)
 
         char* newPath = calloc(strlen(currPath) + strlen(dirData->d_name)+2, 1);
         strcat(newPath, currPath);
-        strcat(newPath, "/");
+        if (currPath[strlen(currPath) - 1] != '/')
+            strcat(newPath, "/");
         strcat(newPath, dirData->d_name);
 
         if (dirData->d_type != DT_DIR)
@@ -211,12 +242,15 @@ void OutEqualFiles(char* firstPath, char* secondPath, FILE* outputStream)
     stat(firstPath, firstStat);
     stat(secondPath, secondStat);
 
-    fprintf(outputStream, "------------------------\nThese files contain the same:\n");
-    OutFileStat(firstPath, firstStat, outputStream);
-    fprintf(outputStream, "                AND");
-    OutFileStat(secondPath, secondStat, outputStream);
-    fprintf(outputStream, "------------------------\n");
-
+    if(firstStat->st_ino != secondStat->st_ino && !IsHistoryContain(&history,secondStat->st_ino, firstStat->st_ino))
+    {
+        AddHistory(&history, firstStat->st_ino, secondStat->st_ino);
+        fprintf(outputStream, "------------------------\nThese files contain the same:\n");
+        OutFileStat(firstPath, firstStat, outputStream);
+        fprintf(outputStream, "                AND");
+        OutFileStat(secondPath, secondStat, outputStream);
+        fprintf(outputStream, "------------------------\n");
+    }
     free(firstStat);
     free(secondStat);
 }
