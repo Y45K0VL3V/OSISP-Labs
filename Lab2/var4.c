@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
     if (!(SafeOpenDir(&firstDir, argv[1]) & SafeOpenDir(&secondDir, argv[2])))
         return 0;
 
-    int fileDescriptor;
-    if ((fileDescriptor = open(argv[3], O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1)
+    int fileDescriptor = open(argv[3], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+    if (fileDescriptor == -1)
     {
         fprintf(stderr, "File error: Can't read file %s.\n", argv[3]);
         return 0;

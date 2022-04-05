@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    int descriptor;
-    if ((descriptor = open(argv[1], O_RDONLY)) == -1)
+    int descriptor = open(argv[1], O_RDONLY);
+    if (descriptor == -1)
     {
         fprintf(stderr, "File error: Can't read file or it doesn't exist.\n");
         return 0;

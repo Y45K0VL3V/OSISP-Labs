@@ -33,15 +33,15 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    int srcDescriptor;
-    if ((srcDescriptor = open(argv[1], O_RDONLY)) == -1)
+    int srcDescriptor = open(argv[1], O_RDONLY);
+    if (srcDescriptor == -1)
     {
         fprintf(stderr, "File error: Can't read source file or it doesn't exist.\n");
         return 0;
     }
 
-    int destDescriptor;
-    if ((destDescriptor = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1)
+    int destDescriptor = open(argv[2], O_WRONLY | O_TRUNC | O_CREAT, 0644);
+    if (destDescriptor == -1)
     {
         fprintf(stderr, "File error: Can't open destination file.\n");
         return 0;
