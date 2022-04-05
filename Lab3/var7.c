@@ -1,14 +1,12 @@
-#include <sys/stat.h>
-#include <time.h>
 #include "stdio.h"
 #include "dirent.h"
 #include "fcntl.h"
 #include "stdlib.h"
 #include "string.h"
 #include "unistd.h"
-#include "ctype.h"
 #include "limits.h"
 #include "errno.h"
+#include "wait.h"
 
 typedef struct List
 {
@@ -122,10 +120,41 @@ int main(int argc, char *argv[])
 
     GetAllFilePath(&firstDir, argv[1]);
     List* currPathFirst = dirFiles;
+    int processesAmount = 0;
     while (currPathFirst != NULL)
     {
-        FileFindWord(currPathFirst->str, argv[2]);
+        if (processesAmount == maxProcessesAmount)
+        {
+            if (wait(NULL) == -1)
+            {
+                fprintf(stderr, "Error occurred, while waiting child process closing.\n");
+            }
+            processesAmount--;
+        }
+
+        pid_t pid_t = fork();
+        switch (pid_t) {
+            case 0:
+                FileFindWord(currPathFirst->str, argv[2]);
+                return 1;
+            case -1:
+                fprintf(stderr, "Error: can't create child process");
+                break;
+            default:
+                processesAmount++;
+                break;
+        }
         currPathFirst = currPathFirst->next;
+    }
+
+    while (1)
+    {
+        if (wait(NULL) == -1)
+        {
+            if (errno == ECHILD)
+                break;
+            fprintf(stderr, "Error occurred, while waiting child process closing.\n");
+        }
     }
 
     return 1;
@@ -199,5 +228,6 @@ void FileFindWord(char* filepath, char* word)
     if (currLength == wantedLength)
         matchedWordsAmount++;
 
-    printf("PID: %i\nPath: %s\nChecked bytes: %i\nMatched words: %i\n\n", getpid(), filepath, checkedBytesCount, matchedWordsAmount);
+    printf("PID: %i Bytes: %10.i Words: %10i Path: %s\n", getpid(), checkedBytesCount, matchedWordsAmount, filepath);
+    CloseFile(&file);
 }
