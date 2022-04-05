@@ -178,7 +178,7 @@ void GetAllFilePath(DIR** dir, char* currPath)
             AddList(&dirFiles, newPath);
         else
         {
-            if (!SafeOpenDir(&subDir,newPath))
+            if (dirData->d_type != DT_DIR || !SafeOpenDir(&subDir,newPath))
             {
                 free(newPath);
                 continue;
@@ -228,6 +228,6 @@ void FileFindWord(char* filepath, char* word)
     if (currLength == wantedLength)
         matchedWordsAmount++;
 
-    printf("PID: %i Bytes: %10.i Words: %10i Path: %s\n", getpid(), checkedBytesCount, matchedWordsAmount, filepath);
+    printf("PID: %i Bytes: %10i Words: %10i Path: %s\n", getpid(), checkedBytesCount, matchedWordsAmount, filepath);
     CloseFile(&file);
 }
