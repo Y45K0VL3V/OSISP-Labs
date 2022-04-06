@@ -5,6 +5,8 @@
 #include "time.h"
 #include "sys/timeb.h"
 #include "string.h"
+#include "errno.h"
+#include "wait.h"
 
 #define TIME_STR_SIZE 12
 
@@ -37,6 +39,16 @@ int main()
     }
 
     system("ps -x");
+    
+    while (1)
+    {
+        if (wait(NULL) == -1)
+        {
+            if (errno == ECHILD)
+                break;
+            fprintf(stderr, "Error occurred, while waiting child process closing.\n");
+        }
+    }
 
     return 0;
 }

@@ -90,12 +90,12 @@ int main(int argc, char *argv[])
         fprintf(stderr, "First argument - 1st directory path.\n");
         fprintf(stderr, "Second argument - wanted word.\n");
         fprintf(stderr, "Third argument - max processes number.\n");
-        return 0;
+        return -1;
     }
 
     DIR *firstDir;
     if (!SafeOpenDir(&firstDir, argv[1]))
-        return 0;
+        return -1;
 
     char *endPos;
     long maxProcessesAmount = strtol(argv[3], &endPos,10);
@@ -103,19 +103,19 @@ int main(int argc, char *argv[])
     if ((errno == ERANGE && (maxProcessesAmount == LONG_MAX || maxProcessesAmount == LONG_MIN)) || (errno != 0 && maxProcessesAmount == 0))
     {
         fprintf(stderr, "Error: lines amount out of range.\n");
-        return 0;
+        return -1;
     }
     else
         if (maxProcessesAmount < 1)
         {
             fprintf(stderr, "Error: number less than 1.\n");
-            return 0;
+            return -1;
         }
         else
             if (endPos[0] != '\0' || endPos == argv[3])
             {
                 fprintf(stderr, "Error: can't cast entered text to int.\n");
-                return 0;
+                return -1;
             }
 
     GetAllFilePath(&firstDir, argv[1]);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
         switch (pid_t) {
             case 0:
                 FileFindWord(currPathFirst->str, argv[2]);
-                return 1;
+                return 0;
             case -1:
                 fprintf(stderr, "Error: can't create child process");
                 break;
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    return 1;
+    return 0;
 }
 void GetAllFilePath(DIR** dir, char* currPath)
 {
