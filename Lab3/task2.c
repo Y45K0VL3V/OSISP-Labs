@@ -31,7 +31,7 @@ int main()
         {
             case 0:
                 OutProcessInfo();
-                return 0;
+                exit(0);
             case -1:
                 fprintf(stderr, "Error: can't create child process");
                 break;

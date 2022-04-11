@@ -136,15 +136,15 @@ int main(int argc, char *argv[])
         switch (pid_t) {
             case 0:
                 FileFindWord(currPathFirst->str, argv[2]);
-                return 0;
+                exit(0);
             case -1:
                 fprintf(stderr, "Error: can't create child process");
                 break;
             default:
                 processesAmount++;
+                currPathFirst = currPathFirst->next;
                 break;
         }
-        currPathFirst = currPathFirst->next;
     }
 
     while (1)
